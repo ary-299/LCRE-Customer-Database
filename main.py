@@ -385,25 +385,58 @@ while True:
                     
                     if YSYN == "y": 
                         while True:
-                            print("What do you want to edit?\n1. Name\n2. Street\n3. House Number\n4. City\n")
+                            print("What do you want to edit?\n1. Name\n2. Street\n3. House Number\n4. City\n\n-> Type b to go back!")
                             NASHC = input("-> ").strip()
                             
                             if NASHC == "1":
-                                data[customer_ID]["name"] = prompt("Edit the Name: ", default=data[customer_ID]["name"])
-                                break
+                                temp_name = prompt("Edit the Name: ", default=data[customer_ID]["name"])
+                                if temp_name.replace(" ", "").replace("-", "") .isalpha() == True:
+                                    data[customer_ID]["name"] = temp_name
+                                    break
+                                else:
+                                    print(Fore.RED + "\nInvalid entry! Press any Key to continue!\n" + Style.RESET_ALL)
+                                    readchar.readkey()
+                                    continue
                             elif NASHC == "2":
-                                data[customer_ID]["adress"]["street"] = prompt("Edit the Street: ", default=data[customer_ID]["adress"]["street"])
-                                break
+                                temp_street = prompt("Edit the Street: ", default=data[customer_ID]["adress"]["street"])
+                                if temp_street.replace(" ", "").replace("-", "") .isalpha()== True:
+                                    data[customer_ID]["adress"]["street"] = temp_street 
+                                    break
+                                else:
+                                    print(Fore.RED + "\nInvalid House Number! Press any Key to conitnue\n" + Style.RESET_ALL)
+                                    readchar.readkey()
+                                    continue
                             elif NASHC == "3":
-                                data[customer_ID]["adress"]["house number"] = prompt("Edit the House number!: ", default=data[customer_ID]["adress"]["house number"])
-                                break
+                                try:
+                                    temp_HN = int(prompt("Edit the House number!: ", default=data[customer_ID]["adress"]["house number"]))
+                                    data[customer_ID]["adress"]["house_number"] = int(temp_HN)
+                                    break
+                                except ValueError:
+                                    print(Fore.RED + "\nThat is not a number! Press any key to go back!\n" + Style.RESET_ALL)
+                                    readchar.readkey()
+                                    continue
                             elif NASHC == "4":
-                                data[customer_ID]["adress"]["city"] = prompt("Edit the City: ", default=data[customer_ID]["adress"]["city"])
+                                temp_City = prompt("Edit the city: ", default=data[customer_ID]["adress"]["city"])
+                                if temp_City.replace(" ", "").replace("-", "") .isalpha() == True:
+                                    temp_city = data[customer_ID]["adress"]["city"]
+                                    break
+                                else:
+                                    print(Fore.RED + "\nInvalid City! Press any Key to go bacK!\n" + Style.RESET_ALL)
+                                    readchar.readkey()
+                                    continue
+                            elif NASHC == "b":
+                                time.sleep(0.1)
+                                print("\r Going back ●○○○  ", end="")
+                                time.sleep(0.1)
+                                print("\r Going back ○●○○  ", end="")
+                                time.sleep(0.1)
+                                print("\r Going back ○○●○  ", end="")
+                                os.system('cls' if os.name == 'nt' else 'clear')
                                 break
                             else:
                                 print("Invalid choice, choose 1-4.")
                                 continue
-                        
+
                         with open(data_path, "w") as f:
                             json.dump(data, f, indent=4)
                         print("\nData successfully updated and saved!")
