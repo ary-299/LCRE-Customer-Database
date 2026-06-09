@@ -2,49 +2,9 @@
     "1": {
         "name": "John Doe",
         "adress": {
-            "street": "fortnite street",
-            "house number": "67",
-            "city": "tiled towers"
-        }
-    },
-    "2": {
-        "name": "Jane Smith",
-        "adress": {
-            "street": "dagestan street",
-            "house number": "420",
-            "city": "moscow"
-        }
-    },
-    "3": {
-        "name": "Ary",
-        "adress": {
-            "street": "Ayri Street",
-            "house number": "7",
-            "city": "o block"
-        }
-    },
-    "4": {
-        "name": "Peter",
-        "adress": {
-            "street": "Prenzlauer Alee",
-            "house number": "8",
-            "city": "Berlin"
-        }
-    },
-    "5": {
-        "name": " Max",
-        "adress": {
-            "street": "Musterstrasse",
-            "house number": "24",
-            "city": "Berlin"
-        }
-    },
-    "6": {
-        "name": "Ary",
-        "adress": {
-            "street": "Ary",
-            "house number": "2",
-            "city": "hz"
+            "street": "Washington street",
+            "house number": "1",
+            "city": "New York City"
         }
     }
 }

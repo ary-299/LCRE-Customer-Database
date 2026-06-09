@@ -337,74 +337,101 @@ while True:
         time.sleep(0.5)
 
     elif REA == "E" or REA == "e": 
-        TDE = 0
-        while True:    
-            if TDE == 999:
-                break
-            os.system('cls' if os.name == 'nt' else 'clear')
-            print(Fore.BLUE + Style.BRIGHT + "Edit Data\n\n")
-            try:
-                customer_ID = str(int(input(Fore.BLUE +"\nEnter the customers ID: " + Style.RESET_ALL+ Style.BRIGHT + "\nEnter a letter to go back!\n" + Style.RESET_ALL)))
-                time.sleep(0.4)
-                time.sleep(1)
-            except ValueError:
-                break
-            try:
-                time.sleep(0.1)
-                print("\r Searching ○○●○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ○●○○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ●○○○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ○●○○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ○○●○  ", end="")
-                time.sleep(0.5)
-                os.system('cls' if os.name == 'nt' else 'clear')
-                print("\n====================================\n" +
-                Fore.CYAN + Style.BRIGHT + "\n" + "Name: " + Style.RESET_ALL + Fore.CYAN + data[customer_ID]["name"] +Style.RESET_ALL+ "\n"+ Fore.GREEN +
-                Style.BRIGHT + "Adress:\n" + Style.RESET_ALL +
-                Fore.GREEN + "   Street:" + data[customer_ID]["adress"]["street"] + "\n" +
-                "   House Number:" + data[customer_ID]["adress"]["house number"] + "\n" +
-                "   City:" + data[customer_ID]["adress"]["city"] + "\n" +
-                Style.RESET_ALL +
-                "\n====================================")
-                YSYN = input(Style.BRIGHT + "\n\nAre you sure that you want to edit this data? (Y/N)\n*everything except for Y and N will be counted as N!\n").lower()
-                if YSYN == "y": 
-                    with open(data_path, "r") as f:
-                        data = json.load(f)
-                        while True:
-                            print("What do you want to edit?\n1. Name\n\n  2.Adress\n\n    3.Street\n\n      4.House Number\n\n        5. City")
-                            NASHC = int(input("->"))
-                            if NASHC == 1:
-                                prompt("Edit the Name:" + data[customer_ID]["name"])
-                else:
+            TDE = 0
+            while True:    
+                if TDE == 999:
                     break
-
-            except KeyError:
-                time.sleep(0.1)
-                print("\r Searching ●○○○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ○●○○  ", end="")
-                time.sleep(0.1)
-                print("\r Searching ○○●○  ", end="")
-                while True:
-                    ECYN = input("Do you want to search again? (Y/N)").lower()
-                    if ECYN == "y":
-                        print("Try again:")
-                        break
-                    elif ECYN == "n":
-                        TDE = 999
-                        print("\rGoing Back.  ", end="")
-                        time.sleep(0.1)
-                        print("\rGoing Back.. ", end="")
-                        time.sleep(0.1)    
-                        print("\rGoing Back...", end="")
-                        time.sleep(0.1)
-                        print("\rGoing Back.  ", end="")
-                        time.sleep(0.3)
-                        break
-                    else:
-                        print("That is not a valid answer! Try again")
-                        continue
+                    
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(Fore.BLUE + Style.BRIGHT + "Edit Data\n\n")
+                
+                user_id_input = input(Fore.BLUE + "\nEnter the customers ID: " + Style.RESET_ALL + Style.BRIGHT + "\nEnter a letter to go back!\n" + Style.RESET_ALL).strip()
+                
+                if not user_id_input.isdigit():
+                    break
+                    
+                customer_ID = user_id_input
+                
+                with open(data_path, "r") as f:
+                    data = json.load(f)
+                    
+                try:
+                    time.sleep(0.1)
+                    print("\r Searching ○○●○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ○●○○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ●○○○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ○●○○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ○○●○  ", end="")
+                    time.sleep(0.5)
+                    
+                    if customer_ID not in data:
+                        raise KeyError
+                    
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print("\n====================================\n" +
+                    Fore.CYAN + Style.BRIGHT + "\n" + "Name: " + Style.RESET_ALL + Fore.CYAN + data[customer_ID]["name"] + Style.RESET_ALL + "\n" + Fore.GREEN +
+                    Style.BRIGHT + "Adress:\n" + Style.RESET_ALL +
+                    Fore.GREEN + "   Street:" + data[customer_ID]["adress"]["street"] + "\n" +
+                    "   House Number:" + data[customer_ID]["adress"]["house number"] + "\n" +
+                    "   City:" + data[customer_ID]["adress"]["city"] + "\n" +
+                    Style.RESET_ALL +
+                    "\n====================================")
+                    
+                    YSYN = input(Style.BRIGHT + "\n\nAre you sure that you want to edit this data? (Y/N)\n*everything except for Y and N will be counted as N!\n").lower()
+                    
+                    if YSYN == "y": 
+                        while True:
+                            print("What do you want to edit?\n1. Name\n2. Street\n3. House Number\n4. City\n")
+                            NASHC = input("-> ").strip()
+                            
+                            if NASHC == "1":
+                                data[customer_ID]["name"] = prompt("Edit the Name: ", default=data[customer_ID]["name"])
+                                break
+                            elif NASHC == "2":
+                                data[customer_ID]["adress"]["street"] = prompt("Edit the Street: ", default=data[customer_ID]["adress"]["street"])
+                                break
+                            elif NASHC == "3":
+                                data[customer_ID]["adress"]["house number"] = prompt("Edit the House number!: ", default=data[customer_ID]["adress"]["house number"])
+                                break
+                            elif NASHC == "4":
+                                data[customer_ID]["adress"]["city"] = prompt("Edit the City: ", default=data[customer_ID]["adress"]["city"])
+                                break
+                            else:
+                                print("Invalid choice, choose 1-4.")
+                                continue
+                        
+                        with open(data_path, "w") as f:
+                            json.dump(data, f, indent=4)
+                        print("\nData successfully updated and saved!")
+                        time.sleep(1)
+                        
+                except KeyError:
+                    time.sleep(0.1)
+                    print("\r Searching ●○○○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ○●○○  ", end="")
+                    time.sleep(0.1)
+                    print("\r Searching ○○●○  ", end="")
+                    print("\nID not found!")
+                    
+                    while True:
+                        ECYN = input("Do you want to search again? (Y/N)").lower()
+                        if ECYN == "y":
+                            print("Try again:")
+                            break
+                        elif ECYN == "n":
+                            TDE = 999
+                            print("\rGoing Back.  ", end="")
+                            time.sleep(0.1)
+                            print("\rGoing Back.. ", end="")
+                            time.sleep(0.1)    
+                            print("\rGoing Back...", end="")
+                            time.sleep(0.3)
+                            break
+                        else:
+                            print("That is not a valid answer! Try again")
+                            continue
