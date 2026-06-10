@@ -90,12 +90,13 @@ while True:
     ███▀▄███░███░███░███░▄
     ▀█████▀░░░▀███▀░░░▀██▀
     """ + Style.RESET_ALL)                                                                                               #LOOP1
-    print("========== !Main Menu! ==========\n\n" +
+    print("=============== !Main Menu! ===============\n\n" +
         Fore.RED + ">>Read Data: R<<\n\n" 
         + Fore.GREEN + "       >>Add Data: A<<\n\n" 
-        + Fore.BLUE + "             >>Edit Data: E<<\n\n" 
+        + Fore.BLUE + "              >>Edit Data: E<<\n\n" + Style.RESET_ALL 
+        + "                    >>Delete Data: D<<\n\n" 
         + Style.RESET_ALL +
-        "=================================\n->made by ary\n\n"
+        "===========================================\n->made by ary\n\n"
     )
     REA = readchar.readkey()
 
@@ -108,8 +109,7 @@ while True:
             time.sleep(0.5)
             
             while True:                                                                                                   #LOOP2
-                print(Fore.CYAN + "\n\n1. Search by ID\n2. Search by Information\n3. List all Information from current session\n4. Go back to Menu\n" + Style.RESET_ALL )
-                IOI = readchar.readkey()
+                IOI = input(Fore.CYAN + "\n\n1. Search by ID\n2. Search by Information\n3. List all Information from current session\n4. Go back to Menu\n" + Style.RESET_ALL )
                 if IOI == "1":                                                                                         #ID SEARCH
                     while True:                                                                                          #LOOP3
                         customer_ID = input(Fore.BLUE +"\nEnter the customers ID: " + Style.RESET_ALL)
@@ -267,76 +267,83 @@ while True:
             data = json.load(f)
             os.system('cls' if os.name == 'nt' else 'clear')
             print(Fore.RED + Style.BRIGHT + "\nAdd Data\n" + Style.RESET_ALL)
-            time.sleep(0.5)
-            print("To cancel, type b\n=====================================\n")
+            AddC = input(Fore.CYAN + "\n\n\nDo you really want to add a new customer? (Y/N)\n\n" + Style.RESET_ALL).lower()
             time.sleep(0.1)
 
+            if AddC == "y":
+                while True:    
+                    new_name = input(Fore.CYAN + "\n\nEnter the customers Name\n"+ Style.RESET_ALL +"->")
+                    if new_name.replace(" ", "").replace("-", "").isalpha():
+                        print(Fore.GREEN + Style.BRIGHT + new_name + " ✓" + Style.RESET_ALL)
+                        break
+                    else: 
+                        print(Fore.RED + Style.BRIGHT + new_name + " X" + Style.RESET_ALL)
+                        print("\nPlease Enter a Real Name!\n")
 
-        while True:    
-            new_name = input(Fore.CYAN + "Enter the customers Name\n"+ Style.RESET_ALL +"->")
-            if new_name.replace(" ", "").replace("-", "").isalpha():
-                print(Fore.GREEN + Style.BRIGHT + new_name + " ✓" + Style.RESET_ALL)
-                break
-            else: 
-                print(Fore.RED + Style.BRIGHT + new_name + " X" + Style.RESET_ALL)
-                print("\nPlease Enter a Real Name!\n")
+                while True:    
+                    new_street = input(Fore.CYAN + "\nEnter the customers Street\n" + Style.RESET_ALL +"->")
+                    if new_street.replace(" ", "").replace("-", "").replace(".", "").isalpha():
+                        print(Fore.GREEN + Style.BRIGHT + new_street + " ✓" + Style.RESET_ALL)
+                        break  
+                    else:
+                        print(Fore.RED + Style.BRIGHT + new_street + " X" + Style.RESET_ALL)
+                        print("Please Enter a Real Street!")
 
-        while True:    
-            new_street = input(Fore.CYAN + "\nEnter the customers Street\n" + Style.RESET_ALL +"->")
-            if new_street.replace(" ", "").replace("-", "").replace(".", "").isalpha():
-                print(Fore.GREEN + Style.BRIGHT + new_street + " ✓" + Style.RESET_ALL)
-                break  
+                while True:
+                    try:
+                        new_house_number = int(input(Fore.CYAN + "\nEnter the customers house number\n"+ Style.RESET_ALL+ "->"))
+                        print(Fore.GREEN + Style.BRIGHT + str(new_house_number) + " ✓\n" + Style.RESET_ALL)    
+                        break  
+                    except ValueError: 
+                        print(Fore.RED + "\nThat is not a number! Try again!\n" + Style.RESET_ALL)
+
+                while True:    
+                    new_city = input(Fore.CYAN + "\nEnter the customers city\n"+Style.RESET_ALL +"->")
+                    if new_city.replace(" ", "").replace("-", "").replace(".", "").isalpha():
+                        print(Fore.GREEN + Style.BRIGHT + new_city + " ✓\n" + Style.RESET_ALL)
+                        break  
+                    else:
+                        print(Fore.RED + Style.BRIGHT + new_city + " X\n" + Style.RESET_ALL)
+                        print(Fore.RED + "\nPlease Enter a Real City!\n" + Style.RESET_ALL)
+
+                print(Fore.RED + "\rLoading.  ", end="")
+                time.sleep(0.25)
+                print(Fore.BLUE + "\rLoading.. ", end="")
+                time.sleep(0.25)
+                print(Fore.YELLOW + "\rLoading..." + Style.RESET_ALL)
+                time.sleep(0.25)
+
+                All_IDs = []
+                for key in data.keys():
+                    All_IDs.append(int(key))
+                    
+                if not All_IDs:
+                    new_ID = 1
+                else:
+                    new_ID = max(All_IDs) + 1     #if json is empty, fallback to ID=1
+
+                data[str(new_ID)] = {
+                    "name": new_name,
+                    "adress": {
+                        "street":new_street,
+                        "house number":str(new_house_number),
+                        "city":new_city
+                    }
+                }
+
+                with open(data_path,"w") as f:
+                    json.dump(data, f, indent=4)
+
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(Fore.MAGENTA + Style.BRIGHT + f" ----> Customers new ID: {new_ID}\n\n" + Style.RESET_ALL) 
+                time.sleep(0.5)
             else:
-                print(Fore.RED + Style.BRIGHT + new_street + " X" + Style.RESET_ALL)
-                print("Please Enter a Real Street!")
-
-        while True:
-            try:
-                new_house_number = int(input(Fore.CYAN + "\nEnter the customers house number\n"+ Style.RESET_ALL+ "->"))
-                print(Fore.GREEN + Style.BRIGHT + str(new_house_number) + " ✓\n" + Style.RESET_ALL)    
-                break  
-            except ValueError: 
-                print(Fore.RED + "\nThat is not a number! Try again!\n" + Style.RESET_ALL)
-
-        while True:    
-            new_city = input(Fore.CYAN + "\nEnter the customers city\n"+Style.RESET_ALL +"->")
-            if new_city.replace(" ", "").replace("-", "").replace(".", "").isalpha():
-                print(Fore.GREEN + Style.BRIGHT + new_city + " ✓\n" + Style.RESET_ALL)
-                break  
-            else:
-                print(Fore.RED + Style.BRIGHT + new_city + " X\n" + Style.RESET_ALL)
-                print(Fore.RED + "\nPlease Enter a Real City!\n" + Style.RESET_ALL)
-
-        print(Fore.RED + "\rLoading.  ", end="")
-        time.sleep(0.25)
-        print(Fore.BLUE + "\rLoading.. ", end="")
-        time.sleep(0.25)
-        print(Fore.YELLOW + "\rLoading..." + Style.RESET_ALL)
-        time.sleep(0.25)
-
-        All_IDs = []
-        for key in data.keys():
-            All_IDs.append(int(key))
-            
-        new_ID = max(All_IDs) + 1
-
-        data[str(new_ID)] = {
-            "name": new_name,
-            "adress": {
-                "street":new_street,
-                "house number":str(new_house_number),
-                "city":new_city
-            }
-        }
-
-        with open(data_path,"w") as f:
-            json.dump(data, f, indent=4)
-
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(Fore.MAGENTA + Style.BRIGHT + f" ----> Customers new ID: {new_ID}\n\n" + Style.RESET_ALL) 
-        time.sleep(0.5)
+                print(Fore.RED + "\nAborted!"+ Style.RESET_ALL+ Style.BRIGHT + " Press any key to go back to menu!\n\n" + Style.RESET_ALL)
+                readchar.readkey()
+                os.system('cls' if os.name == 'nt' else 'clear')
 
     elif REA == "E" or REA == "e": 
+            time.sleep(1)
             TDE = 0
             while True:    
                 if TDE == 999:
@@ -348,6 +355,7 @@ while True:
                 user_id_input = input(Fore.BLUE + "\nEnter the customers ID: " + Style.RESET_ALL + Style.BRIGHT + "\nEnter a letter to go back!\n" + Style.RESET_ALL).strip()
                 
                 if not user_id_input.isdigit():
+                    os.system('cls' if os.name == 'nt' else 'clear')
                     break
                     
                 customer_ID = user_id_input
@@ -374,55 +382,66 @@ while True:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("\n====================================\n" +
                     Fore.CYAN + Style.BRIGHT + "\n" + "Name: " + Style.RESET_ALL + Fore.CYAN + data[customer_ID]["name"] + Style.RESET_ALL + "\n" + Fore.GREEN +
-                    Style.BRIGHT + "Adress:\n" + Style.RESET_ALL +
-                    Fore.GREEN + "   Street:" + data[customer_ID]["adress"]["street"] + "\n" +
-                    "   House Number:" + data[customer_ID]["adress"]["house number"] + "\n" +
-                    "   City:" + data[customer_ID]["adress"]["city"] + "\n" +
-                    Style.RESET_ALL +
+                    Style.BRIGHT + "Adress:\n"
+                    "   Street:" + Style.RESET_ALL + Fore.GREEN + data[customer_ID]["adress"]["street"] + "\n" + Style.RESET_ALL +
+                    Fore.GREEN + Style.BRIGHT + "   House Number:" + Style.RESET_ALL + Fore.GREEN  + data[customer_ID]["adress"]["house number"] + "\n" + Style.RESET_ALL +
+                    Fore.GREEN + Style.BRIGHT + "   City:" + Style.RESET_ALL + Fore.GREEN  + data[customer_ID]["adress"]["city"] + "\n"+ Style.RESET_ALL +
                     "\n====================================")
                     
-                    YSYN = input(Style.BRIGHT + "\n\nAre you sure that you want to edit this data? (Y/N)\n*everything except for Y and N will be counted as N!\n").lower()
+                    YSYN = input(Style.BRIGHT + Fore.RED+ "\n\nAre you sure that you want to edit this data? (Y/N)\n"+ Style.RESET_ALL + Style.BRIGHT + "*everything except for Y and N will be counted as N!\n" + Style.RESET_ALL).lower()
                     
-                    if YSYN == "y": 
+                    if YSYN == "y":
+                        os.system('cls' if os.name == 'nt' else 'clear')
                         while True:
-                            print("What do you want to edit?\n1. Name\n2. Street\n3. House Number\n4. City\n\n-> Type b to go back!")
+                            print("\n====================================\n" +
+                            Fore.CYAN + Style.BRIGHT + "\n" + "Name: " + Style.RESET_ALL + Fore.CYAN + data[customer_ID]["name"] + Style.RESET_ALL + "\n" + Fore.GREEN +
+                            Style.BRIGHT + "Adress:\n"
+                            "   Street:" + Style.RESET_ALL + Fore.GREEN + data[customer_ID]["adress"]["street"] + "\n" + Style.RESET_ALL +
+                            Fore.GREEN + Style.BRIGHT + "   House Number:" + Style.RESET_ALL + Fore.GREEN  + data[customer_ID]["adress"]["house number"] + "\n" + Style.RESET_ALL +
+                            Fore.GREEN + Style.BRIGHT + "   City:" + Style.RESET_ALL + Fore.GREEN  + data[customer_ID]["adress"]["city"] + "\n"+ Style.RESET_ALL +
+                            "\n====================================")
+                            print(Fore.RED + Style.BRIGHT + "\n\nWhat do you want to edit?\n"+Style.RESET_ALL+Fore.CYAN+"\n1. Name"+Style.RESET_ALL+Fore.GREEN+"\n2. Street\n3. House Number\n4. City\n\n"+Style.RESET_ALL)
                             NASHC = input("-> ").strip()
                             
                             if NASHC == "1":
-                                temp_name = prompt("Edit the Name: ", default=data[customer_ID]["name"])
+                                temp_name = prompt("\nEdit the Name: ", default=data[customer_ID]["name"])
                                 if temp_name.replace(" ", "").replace("-", "") .isalpha() == True:
                                     data[customer_ID]["name"] = temp_name
                                     break
                                 else:
-                                    print(Fore.RED + "\nInvalid entry! Press any Key to continue!\n" + Style.RESET_ALL)
+                                    print(Fore.RED + "\nInvalid Name! Press any Key to continue!\n")
                                     readchar.readkey()
+                                    os.system('cls' if os.name == 'nt' else 'clear')
                                     continue
                             elif NASHC == "2":
-                                temp_street = prompt("Edit the Street: ", default=data[customer_ID]["adress"]["street"])
+                                temp_street = prompt("\nEdit the Street: "+Style.RESET_ALL, default=data[customer_ID]["adress"]["street"])
                                 if temp_street.replace(" ", "").replace("-", "") .isalpha()== True:
                                     data[customer_ID]["adress"]["street"] = temp_street 
                                     break
                                 else:
-                                    print(Fore.RED + "\nInvalid House Number! Press any Key to conitnue\n" + Style.RESET_ALL)
+                                    print(Fore.RED + "\nInvalid Street! Press any Key to conitnue\n")
                                     readchar.readkey()
+                                    os.system('cls' if os.name == 'nt' else 'clear')
                                     continue
                             elif NASHC == "3":
                                 try:
-                                    temp_HN = int(prompt("Edit the House number!: ", default=data[customer_ID]["adress"]["house number"]))
+                                    temp_HN = int(prompt("\nEdit the House number: ", default=data[customer_ID]["adress"]["house number"]))
                                     data[customer_ID]["adress"]["house_number"] = int(temp_HN)
                                     break
                                 except ValueError:
                                     print(Fore.RED + "\nThat is not a number! Press any key to go back!\n" + Style.RESET_ALL)
                                     readchar.readkey()
+                                    os.system('cls' if os.name == 'nt' else 'clear')
                                     continue
                             elif NASHC == "4":
-                                temp_City = prompt("Edit the city: ", default=data[customer_ID]["adress"]["city"])
+                                temp_City = prompt("\nEdit the city:" , default=data[customer_ID]["adress"]["city"])
                                 if temp_City.replace(" ", "").replace("-", "") .isalpha() == True:
                                     temp_city = data[customer_ID]["adress"]["city"]
                                     break
                                 else:
                                     print(Fore.RED + "\nInvalid City! Press any Key to go bacK!\n" + Style.RESET_ALL)
                                     readchar.readkey()
+                                    os.system('cls' if os.name == 'nt' else 'clear')
                                     continue
                             elif NASHC == "b":
                                 time.sleep(0.1)
@@ -439,7 +458,7 @@ while True:
 
                         with open(data_path, "w") as f:
                             json.dump(data, f, indent=4)
-                        print("\nData successfully updated and saved!")
+                        print(Fore.GREEN + "\nData successfully updated and saved!" +Style.RESET_ALL)
                         time.sleep(1)
                         
                 except KeyError:
@@ -449,10 +468,10 @@ while True:
                     print("\r Searching ○●○○  ", end="")
                     time.sleep(0.1)
                     print("\r Searching ○○●○  ", end="")
-                    print("\nID not found!")
+                    print(Fore.RED + "\r                                           \n\nID not found!\n" +Style.RESET_ALL,end="")
                     
                     while True:
-                        ECYN = input("Do you want to search again? (Y/N)").lower()
+                        ECYN = input(Style.BRIGHT +"Do you want to search again? (Y/N)\n"+Style.RESET_ALL).lower()
                         if ECYN == "y":
                             print("Try again:")
                             break
@@ -464,7 +483,47 @@ while True:
                             time.sleep(0.1)    
                             print("\rGoing Back...", end="")
                             time.sleep(0.3)
+                            os.system('cls' if os.name == 'nt' else 'clear')
                             break
                         else:
-                            print("That is not a valid answer! Try again")
+                            print(Style.BRIGHT + Fore.RED + "\n\nThat is not a valid answer!" + Style.RESET_ALL)
                             continue
+    elif REA == "D" or REA == "d":
+        time.sleep(0.2)
+        
+        with open(data_path, "r") as f:
+            data = json.load(f)
+            
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(Fore.RED + Style.BRIGHT + "Delete Customer Record\n\n" + Style.RESET_ALL)
+        
+        target_ID = input(Fore.BLUE + "Enter the ID of the customer to delete: " + Style.RESET_ALL).strip()
+        
+        if target_ID not in data:
+            print(Fore.RED + f"\nThe Customer ID {target_ID} does not exist!" + Style.RESET_ALL)
+            print("Press any key to go back...")
+            readchar.readkey()
+            continue
+            
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(Fore.YELLOW + Style.BRIGHT + "WARNING:" + Style.RESET_ALL)
+        print(f"You are about to permanently delete: {Fore.CYAN}{data[target_ID]['name']}{Style.RESET_ALL}")
+        
+        confirm = input(Fore.RED + "\nAre you absolutely sure? This cannot be undone! (Y/N)\n"+Style.RESET_ALL+Style.BRIGHT+"*any invalid choise will be counted towards N\n\n" + Style.RESET_ALL).lower().strip()
+        
+        if confirm == "y":
+            del data[target_ID]
+            
+            with open(data_path, "w") as f:
+                json.dump(data, f, indent=4)
+                
+            print(Fore.GREEN + "\nCustomer record successfully deleted!" + Style.RESET_ALL)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            time.sleep(1.5)
+        else:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(Fore.BLUE + "\nDeletion canceled. Returning to menu..." + Style.RESET_ALL)
+            time.sleep(1.5)
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        continue

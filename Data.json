@@ -1,9 +1,9 @@
 {
     "1": {
-        "name": "John Do4625",
+        "name": "John Doe",
         "adress": {
-            "street": "Washington street",
-            "house number": "gug",
+            "street": "Main street",
+            "house number": "1",
             "city": "New York City"
         }
     }
